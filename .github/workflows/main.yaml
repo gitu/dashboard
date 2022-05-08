@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  build:
+  back:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,9 +22,11 @@ jobs:
 
       - name: Build
         run: go build -v ./...
+        working-directory: back
 
       - name: Test
         run: go test -v ./...
+        working-directory: back
 
   tagger:
     runs-on: ubuntu-latest
@@ -44,11 +46,32 @@ jobs:
         id: display
         run: |
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
-  
+
+  front:
+    needs: [tagger]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm install --verbose
+        working-directory: ./front/
+      - run: npm run typecheck
+        working-directory: ./front/
+      - run: npm run lint
+        working-directory: ./front/
+      - run: npm run build
+        working-directory: ./front/
   
   docker:
     runs-on: ubuntu-latest
-    needs: [build, tagger]
+    needs: [back, front, tagger]
     steps:
       - uses: actions/checkout@v2
       -

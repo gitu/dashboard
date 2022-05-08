@@ -3,11 +3,11 @@ ARG VERSION=undefined-docker
 FROM golang:1.18 AS build-back
 
 WORKDIR /src/
-COPY go.mod /src/
-COPY go.sum /src/
+COPY back/go.mod /src/
+COPY back/go.sum /src/
 RUN go mod download
-COPY . /src/
-RUN CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/gitu/dashboard/pkg/version.Version=${VERSION}'" -o /bin/dashboard .
+COPY back /src/
+RUN CGO_ENABLED=0 go build -v -ldflags="-X 'github.com/gitu/dashboard/back/pkg/version.Version=${VERSION}'" -o /bin/dashboard ./cmd/dashboard
 
 
 FROM node:lts-alpine AS build-front

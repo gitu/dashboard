@@ -1,4 +1,4 @@
-module github.com/gitu/dashboard
+module github.com/gitu/dashboard/back
 
 go 1.18
 

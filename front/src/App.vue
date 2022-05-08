@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import {ref, watchEffect} from 'vue'
+import { ref, watchEffect } from "vue";
 
-const API_URL = `/api/hello`
-const info = ref<string>("")
+const API_URL = `/api/hello`;
+const info = ref<string>("");
 
 watchEffect(async () => {
-  const url = `${API_URL}`
-  info.value = await (await fetch(url)).text()
-})
-
+  const url = `${API_URL}`;
+  info.value = await (await fetch(url)).text();
+});
 </script>
 
 <template>
