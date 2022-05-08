@@ -48,7 +48,6 @@ jobs:
           echo 'Output from Find Tag: ${{steps.tagger.outputs.tag}}'
 
   front:
-    needs: [tagger]
     runs-on: ubuntu-latest
 
     steps:
